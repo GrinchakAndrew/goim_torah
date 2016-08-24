@@ -1,4 +1,3 @@
-var routerCalls = 0;
 function Config() {
     var config = {
         altCol: {
@@ -1910,10 +1909,8 @@ function Config() {
 										if(document.querySelector('#stickingMenu h3')){
 											document.querySelector('#stickingMenu h3').appendChild(clone);
 										}
-										try {
 											bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
-											bodyEl2MatchHref = decodeURIComponent(bodyEl2MatchHref)
-											alert(bodyEl2MatchHref);
+											bodyEl2MatchHref = decodeURIComponent(bodyEl2MatchHref);
 											var bodyEl2Match;
 											if(bodyEl2MatchHref) {
 												bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
@@ -1922,9 +1919,6 @@ function Config() {
 											if(bodyEl2Match && slide2animate){
 												config.animatory.animate(slide2animate, 100, 0.3);
 											}
-										}catch(err){
-												alert(err.message);
-										}
                                     }
                                 });
                                 Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),

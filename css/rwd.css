@@ -1,19 +1,11 @@
-		/* @font-face {
+		@font-face {
 			font-family: "_helvetica";
 			src: url('../fonts/Helvetica_CE_Regular.ttf') format('truetype');
-		} */
+		}
         body {
-            font-family: /* "_helvetica",  */Arial;
+            font-family: "_helvetica", Arial;
             font-size: 15px;
         }
-		
-		#console{
-			background-color: black;
-			height: 40px;
-			width: 50%;
-			color: white;
-			margin: 0 auto;
-		}
 	
         ul {
             list-style-type: square;
