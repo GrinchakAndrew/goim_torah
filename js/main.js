@@ -1924,9 +1924,9 @@ function Config() {
 											routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
 											routerCalls = routerCalls + 1;
 											el.innerHTML = routerCalls;
-										
+										alert(bodyEl2Match.getAttribute('name'));
+										alert('123');
 										if(bodyEl2Match && slide2animate){
-											alert(bodyEl2Match.getAttribute('name'));
 											config.animatory.animate(slide2animate, 100, 0.3);
 										}
                                     }
