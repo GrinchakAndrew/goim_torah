@@ -1921,11 +1921,12 @@ function Config() {
 										slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');
 										
 										var el = document.querySelector('#console div span');
-											routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
+											/* routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
 											routerCalls = routerCalls + 1;
-											el.innerHTML = routerCalls;
-										alert(bodyEl2Match.getAttribute('name'));
-										alert('123');
+											el.innerHTML = routerCalls; */
+											var attr = bodyEl2Match.getAttribute('name');
+											el.innerHTML = attr;
+											
 										if(bodyEl2Match && slide2animate){
 											config.animatory.animate(slide2animate, 100, 0.3);
 										}
