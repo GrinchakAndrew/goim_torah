@@ -1298,48 +1298,6 @@ function Config() {
         },
         url: 'data/slides.js',
         slidesCollection: '',
-		promise : new (function (once) {
-			this._thens = [],
-			this.then = function(onResolve, onReject, callbacks) {
-					this._thens.push({resolve : onResolve, reject : onReject, onResolveCallbacks : callbacks});
-					return this;
-				},
-			this.resolve = function(args, isCallback) {
-					this.complete('resolve', args, isCallback);
-				},
-			this.reject = function(val) {
-					this.complete('reject', val);
-				},
-				
-			this.complete = function(which, args, isCallback) {
-					if(which == 'resolve') {
-						this.completer = function(theWhat, isCallback, j) {
-							theWhat(args);
-							if(isCallback) {
-								var onResolveCallbacks = this._thens[j]['onResolveCallbacks'];
-									onResolveCallbacks.forEach(function(onResolveCallback) {
-										onResolveCallback(args);
-								}, this);
-							}
-						};
-					}else if(which == 'reject'){
-						this.then = function (){this.reject && this.reject(arg);};
-					}
-					
-					this._thens.forEach(function(i, j) {
-						this.completer(i[which], isCallback, j);
-					}, this);
-					/*this code will account for 'once', i.e., singleton*/
-							if(once) {
-								/*if you need to retain the subscribers in the event pool, ignore the code below:*/
-								this._thens.splice(0, this._thens.length);
-								this.resolve = this.reject = function(){
-								throw new Error('Promise already completed: NB! Singletone...'); 
-								}
-							}
-				}
-			return this;
-		})(),
         postingCalls: function(url, jsonify) {
             'use strict';
             if (Object.prototype.toString.call(url) === "[object String]") {
@@ -1368,26 +1326,10 @@ function Config() {
                             var lastSlide = document.querySelector('.slide-wrapper:last-of-type') ||
                                 document.querySelector('.slide-wrapper');
                             var lastSlideParent = lastSlide.parentNode;
-                            lastSlideParent.innerHTML = lastSlideParent.innerHTML + _slide_;
-							var callback = function(args) {
-								config.animatory.animate(args, 110, 0.03);
-								return true;
-							};
-							var callbacks = [];
-                            if (document.querySelector('.slide-wrapper:last-of-type')) {
-								config.animatory.els2ani.splice(0, config.animatory.els2ani.length);
-                                config.animatory.els2ani.push(document.querySelector('.slide-wrapper:last-of-type'));
-								config.animatory.els2ani.forEach(function(el2ani){
-									callbacks.push(callback);	
-								});
-                            }
-                            config.menu.cleanMenu();
-                            config.animatory.deanimate();
-							instance.setImgs();
-							config.promise.then(function(){}, function(){}, callbacks);
-							config.animatory.els2ani.forEach(function(el2ani) {
-									config.promise.resolve(el2ani, true);
-							});
+								lastSlideParent.innerHTML = lastSlideParent.innerHTML + _slide_;
+								config.menu.cleanMenu();
+								config.animatory.deanimate(document.querySelector('.slide-wrapper:last-of-type'));
+								instance.setImgs();
 						}
                     }
                 }
@@ -1908,7 +1850,7 @@ function Config() {
                     map: {},
                     mapper: function() {
                         Array.prototype.forEach.call(this.firstHeadingCol, function(i, j) {
-                            slide_itemizely.map[j] = i.offsetTop;
+                            slide_itemizely.map[j] = (i.offsetTop - 100);
                         });
                     },
                     getter: function(key) {
@@ -1934,36 +1876,59 @@ function Config() {
                                 }
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     var href = i.getAttribute("href");
-                                    href = href.replace(/#/, ''),
+										href = href.replace(/#/, ''),
                                         lookUpStr = 'a[name*="' + href + '"' + ']',
-                                        el = document.querySelector(lookUpStr);
-
-                                    if (slide_itemizely.scrollTop >= el.offsetTop && slide_itemizely.scrollTop) {
-
+                                        el = document.querySelector(lookUpStr), 
+										bodyEl2MatchHref = '',
+										bodyEl2Match = '', 
+										slide2animate = '', 
+										stickingMenuH3 = '',
+										clone = '';
+										/*
+											here we add 200 to the value of scrollTop in order to make the menu work
+											with the small-sized slides
+										*/ 
+                                    if ((slide_itemizely.scrollTop + 250) >= el.offsetTop && slide_itemizely.scrollTop) {
                                         Array.prototype.forEach.call(document.querySelectorAll('a[style*=color]'), function(i, j) {
                                             i.style.color = '#0066FF';
                                             i.style.fontWeight = '';
                                         });
-
                                         i.style.color = '#000000';
                                         i.style.fontWeight = 'bold';
+										stickingMenuH3 = document.querySelector('#stickingMenu h3');
+										if(stickingMenuH3){
+											stickingMenuH3.innerHTML = '';	
+										}
+										clone = i.cloneNode(true);
+										clone.style.color = '';
+										clone.style.fontWeight = 'normal';
+										clone.style.textDecoration = 'initial';
+										if(document.querySelector('#stickingMenu h3')){
+											document.querySelector('#stickingMenu h3').appendChild(clone);
+										}
+										bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
+										bodyEl2Match;
+										if(bodyEl2MatchHref) {
+											bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
+										}
+										slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');
+										if(bodyEl2Match && slide2animate){
+											config.animatory.animate(slide2animate, 100, 0.3);
+										}
                                     }
                                 });
                                 Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
                                     });
-
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     i.style.display = 'block';
                                 });
-
                             }
                         });
                         slide_itemizely.targetedElSiblings = [];
                     }
                 };
-
                 if (!Object.keys(slide_itemizely.map).length) {
                     slide_itemizely.mapper();
                 }
@@ -1976,7 +1941,7 @@ function Config() {
             appendStickyMenu: function() {
                 if (!document.getElementById('stickingMenu')) {
                     var newEl = document.createElement('div'),
-                        insideEl = document.createElement('div');
+                    insideEl = document.createElement('div');
                     newEl.id = "stickingMenu";
                     insideEl.id = "washer";
                     newEl.style.opacity = '0.2';
@@ -1990,49 +1955,37 @@ function Config() {
             scrollTop: function() {
                 return (document.body.scrollTop || document.documentElement.scrollTop);
             },
-            deanimate: function() {
-                config.animatory.els2ani.forEach(function(i) {
-                    i && i.style ? i.style.opacity = '0.2' : '';
-                });
+            deanimate: function(el) {
+				if(el){
+					el.style.opacity = '0.2';
+				}
             },
 			activeState : false,
             animate: function(el, time, step, reverse) {
-				console.log(reverse, 'reverse');
                 var _interval,
                     direct = function() {
-                        if (el && !el.style.opacity.match(/^1[.]/)) {						
-							console.log(el, el.style.opacity);
-                            el.style.opacity = parseFloat(el.style.opacity) + step;
+                        if (el && el.style.opacity && !el.style.opacity.match(/^1[.]/)) {
+							config.animatory.activeState = true;
+							el.style.opacity = parseFloat(el.style.opacity) + step;
                         } else {
 							clearInterval(_interval);
 							config.animatory.activeState = false;
-							config.animatory.els2ani.forEach(function(el2ani) {
-									config.promise.resolve(el2ani, true);
-							});
-							config.animatory.els2ani.splice(0, config.animatory.els2ani.length);
 							return true;
                         }
                     },
                     obverse = function() {
                         if (el && el.style.opacity > 0) {
-							console.log(el, el.style.opacity);
+							config.animatory.activeState = true;
                             el.style.opacity = parseFloat(el.style.opacity) - step;
                         } else {
 							el.style.opacity = 0;
                             clearInterval(_interval);
 							config.animatory.activeState = false;
-							config.animatory.els2ani.forEach(function(el2ani) {
-									config.promise.resolve(el2ani, true);
-							});
-							config.animatory.els2ani.splice(0, config.animatory.els2ani.length);
 							return true;
                         }
                     };
                 if(!config.animatory.activeState) {
-					console.log(reverse, 'reverse-1');
-					config.animatory.activeState = true;
 					_interval = setInterval(function() {
-						console.log(reverse, 'reverse-2');
 						reverse ? obverse() : direct();
 					}, time);	
 				}
@@ -2055,13 +2008,12 @@ function Config() {
                     }
                 };
                     config.animatory.appendStickyMenu();
+					
                     if(_animatory.upwards()) {
-						console.log('upwards');
                         config.animatory._windowSrollY = window.scrollY;
                         config.animatory.animate(document.getElementById('stickingMenu'), 100, 0.03, true);
                     }
                     if(_animatory.downwards()) {
-						console.log('downwards');
                         config.animatory._windowSrollY = window.scrollY;
                         config.animatory.animate(document.getElementById('stickingMenu'), 100, 0.03);
                     }
@@ -2080,13 +2032,10 @@ function Config() {
         c: config.closest,
         m: config.menu,
         ani: config.animatory,
-		activeState : config.animatory.activeState,
 		setImgs	: config.setImagesPer_AJAX_InjectedSlides
     }
 };
-
 var instance = !instance ? instance = new Config() : instance;
-
 instance.d(function() {
     instance.m.buildMenu();
     /* var prettyprintedElCol = document.querySelectorAll('.prettyprinted');
@@ -2105,7 +2054,7 @@ instance.d(function() {
         instance.lastSlideOffsetTop = instance.lastSlide.offsetTop;
 		
         if (instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)) {
-            if (instance.lastSlide && document.body.scrollTop >= instance.lastSlideOffsetTop / 1.2) {
+            if (instance.lastSlide && document.body.scrollTop + 250 >= instance.lastSlideOffsetTop / 1.3) {
                 instance.slideIndexArray.push(instance.slideIndex);
                 instance.p();
             }
@@ -2119,7 +2068,8 @@ instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
 instance.e(document, 'keyup', instance.ani.handler);
 instance.e(document, 'mousedown', instance.ani.handler);
 instance.e(document, 'touchend', instance.ani.handler);
-instance.e(document, 'click', function(e) {
+
+/* instance.e(document, 'click', function(e) {
     var event = e || event,
         target = event.target || event.srcElement,
         _config;
@@ -2135,7 +2085,10 @@ instance.e(document, 'click', function(e) {
         _config = !instance.instance ? new instance.F(target, instance.e, instance.g, instance.s, instance.u) : instance.instance;
         _config.o(instance.c(e.target, 'TABLE', 'slide'));
     }
-});
+}); */
+
+
+
 
 
 

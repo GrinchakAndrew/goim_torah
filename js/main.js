@@ -1,3 +1,4 @@
+var routerCalls = 0;
 function Config() {
     var config = {
         altCol: {
@@ -1888,6 +1889,11 @@ function Config() {
 											here we add 200 to the value of scrollTop in order to make the menu work
 											with the small-sized slides
 										*/ 
+										var el = document.querySelector('#console div span');
+										routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
+										routerCalls = routerCalls + 1;
+										el.innerHTML = routerCalls;
+										
                                     if ((slide_itemizely.scrollTop + 250) >= el.offsetTop && slide_itemizely.scrollTop) {
                                         Array.prototype.forEach.call(document.querySelectorAll('a[style*=color]'), function(i, j) {
                                             i.style.color = '#0066FF';
@@ -2064,10 +2070,12 @@ instance.d(function() {
 	instance.setImgs();
 });
 
-instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
+/*sticker animation called off and commented out:*/
+
+/* instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
 instance.e(document, 'keyup', instance.ani.handler);
 instance.e(document, 'mousedown', instance.ani.handler);
-instance.e(document, 'touchend', instance.ani.handler);
+instance.e(document, 'touchend', instance.ani.handler); */
 
 /* instance.e(document, 'click', function(e) {
     var event = e || event,
