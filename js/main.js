@@ -1850,7 +1850,7 @@ function Config() {
                     map: {},
                     mapper: function() {
                         Array.prototype.forEach.call(this.firstHeadingCol, function(i, j) {
-                            slide_itemizely.map[j] = (~navigator.userAgent.indexOf('iPhone') ? i.offsetTop - 100 : i.offsetTop);
+                            slide_itemizely.map[j] = (~navigator.userAgent.indexOf('iPhone') ?  i.offsetTop: i.offsetTop - 100);
                         });
                     },
                     getter: function(key) {
