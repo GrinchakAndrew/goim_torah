@@ -1917,8 +1917,9 @@ function Config() {
 										if(bodyEl2MatchHref) {
 											bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
 										}
-										
 										slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');
+										alert(bodyEl2Match.getAttribute('name'));
+										alert(slide2animate.getAttribute('index'));
 										
 										if(bodyEl2Match && slide2animate){
 											var el = document.querySelector('#console div span');
