@@ -1,9 +1,9 @@
-		@font-face {
+		/* @font-face {
 			font-family: "_helvetica";
 			src: url('../fonts/Helvetica_CE_Regular.ttf') format('truetype');
-		}
+		} */
         body {
-            font-family: "_helvetica", Arial;
+            font-family: /* "_helvetica",  */Arial;
             font-size: 15px;
         }
 		
