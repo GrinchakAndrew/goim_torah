@@ -1809,7 +1809,7 @@ function Config() {
                     recur = function(el, j, prev) {
 						if (el !== h2Col[j + 1]){
 								if (el && el.tagName == 'H3'){
-									var _h = el['innerHTML' ? 'innerHTML' : 'innerText'],
+									var _h = decodeURIComponent(el['innerHTML' ? 'innerHTML' : 'innerText']),
 										_name = _h.replace(/\s+/g, '');
 									el['innerHTML' ? 'innerHTML' : 'innerText'] = '';
 									el.appendChild(config.menu.a(el, _h, _name));
@@ -1876,7 +1876,7 @@ function Config() {
                                 }
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     var href = i.getAttribute("href");
-										href = href.replace(/#/, ''),
+										href = decodeURIComponent(href.replace(/#/, '')),
                                         lookUpStr = 'a[name*="' + href + '"' + ']',
                                         el = document.querySelector(lookUpStr), 
 										bodyEl2MatchHref = '',
