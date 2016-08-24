@@ -1889,12 +1889,10 @@ function Config() {
 											here we add 200 to the value of scrollTop in order to make the menu work
 											with the small-sized slides
 										*/ 
-										var el = document.querySelector('#console div span');
-										routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
-										routerCalls = routerCalls + 1;
-										el.innerHTML = routerCalls;
+										
 										
                                     if ((slide_itemizely.scrollTop + 250) >= el.offsetTop && slide_itemizely.scrollTop) {
+										
                                         Array.prototype.forEach.call(document.querySelectorAll('a[style*=color]'), function(i, j) {
                                             i.style.color = '#0066FF';
                                             i.style.fontWeight = '';
@@ -1912,13 +1910,21 @@ function Config() {
 										if(document.querySelector('#stickingMenu h3')){
 											document.querySelector('#stickingMenu h3').appendChild(clone);
 										}
+										
+										
 										bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
 										bodyEl2Match;
 										if(bodyEl2MatchHref) {
 											bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
 										}
+										
 										slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');
+										
 										if(bodyEl2Match && slide2animate){
+											var el = document.querySelector('#console div span');
+											routerCalls = parseInt(document.querySelector('#console div span').innerHTML);
+											routerCalls = routerCalls + 1;
+											el.innerHTML = routerCalls;
 											config.animatory.animate(slide2animate, 100, 0.3);
 										}
                                     }
