@@ -1995,7 +1995,6 @@ function Config() {
 				}
             },
             _windowSrollY : 0,
-            
 			handler: function(e) {
                 var _animatory = {
                     runOnce: false,
@@ -2067,14 +2066,10 @@ instance.d(function() {
     });
 	instance.setImgs();
 });
-
-/*sticker animation called off and commented out:*/
-
-/* instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
+instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
 instance.e(document, 'keyup', instance.ani.handler);
 instance.e(document, 'mousedown', instance.ani.handler);
-instance.e(document, 'touchend', instance.ani.handler); */
-
+instance.e(document, 'touchend', instance.ani.handler);
 /* instance.e(document, 'click', function(e) {
     var event = e || event,
         target = event.target || event.srcElement,
