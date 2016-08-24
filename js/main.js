@@ -1888,7 +1888,7 @@ function Config() {
 											here we add 200 to the value of scrollTop in order to make the menu work
 											with the small-sized slides
 										*/ 
-                                    if ((slide_itemizely.scrollTop + 250)) >= el.offsetTop && slide_itemizely.scrollTop) {
+                                    if ((slide_itemizely.scrollTop + 250) >= el.offsetTop && slide_itemizely.scrollTop) {
 										
                                         Array.prototype.forEach.call(document.querySelectorAll('a[style*=color]'), function(i, j) {
                                             i.style.color = '#0066FF';
