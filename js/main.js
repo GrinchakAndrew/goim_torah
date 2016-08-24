@@ -1912,6 +1912,7 @@ function Config() {
 										}
 										try {
 											bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
+											bodyEl2MatchHref = decodeURIComponent(bodyEl2MatchHref)
 											alert(bodyEl2MatchHref);
 											var bodyEl2Match;
 											if(bodyEl2MatchHref) {
