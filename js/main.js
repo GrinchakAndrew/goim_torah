@@ -1866,7 +1866,6 @@ function Config() {
 						for(var i = 0; i< oKeys.length; i++) {
 							if(slide_itemizely.scrollTop >= slide_itemizely.map[i]){
 								slide_itemizely.item2Show = i;
-								break;
 							}
 						}
                         var targetedEl;
