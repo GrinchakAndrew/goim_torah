@@ -1850,7 +1850,7 @@ function Config() {
                     map: {},
                     mapper: function() {
                         Array.prototype.forEach.call(this.firstHeadingCol, function(i, j) {
-                            slide_itemizely.map[j] = (~navigator.userAgent.indexOf('iPhone') ?  i.offsetTop: i.offsetTop - 100);
+                            slide_itemizely.map[j] = i.offsetTop: i.offsetTop - 100;
                         });
                     },
                     getter: function(key) {
@@ -1919,13 +1919,14 @@ function Config() {
 											}
                                     }
                                 });
-                                Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
+								
+                                /* Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
-                                    });
-                                slide_itemizely.targetedElSiblings.forEach(function(i, j) {
+                                    }); */
+                                /* slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     i.style.display = 'block';
-                                });
+                                }); */
                             }
                         });
                         slide_itemizely.targetedElSiblings = [];
