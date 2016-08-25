@@ -1863,12 +1863,10 @@ function Config() {
                         Object.keys(this.map).forEach(function(i, j) {
                             slide_itemizely.item2Show = slide_itemizely.scrollTop >= slide_itemizely.map[i] ? i : slide_itemizely.item2Show;
                         });
-
-                        var elCol = document.querySelectorAll('.headingGroup :first-child'),
-                            targetedEl;
-                        Array.prototype.forEach.call(elCol, function(i, j) {
-                            if (i && slide_itemizely.item2Show && i.innerHTML &&
-                                i.innerHTML == slide_itemizely.firstHeadingCol[slide_itemizely.item2Show].innerText) {
+                        var targetedEl;
+                        Array.prototype.forEach.call(document.querySelectorAll('.headingGroup :first-child'), function(i, j) {
+                            if (i && slide_itemizely.item2Show && decodeURIComponent(i.innerHTML) &&
+                                decodeURIComponent(i.innerHTML) == decodeURIComponent(slide_itemizely.firstHeadingCol[slide_itemizely.item2Show].innerText)) {
                                 targetedEl = i;
                                 while (targetedEl.nextElementSibling) {
                                     slide_itemizely.targetedElSiblings.push(targetedEl.nextElementSibling);
@@ -1920,20 +1918,13 @@ function Config() {
                                     }
                                 });
 								
-								var elCol = document.querySelectorAll('.headingGroup a:not(:first-child)');
-									for(var i = elCol.length; i--; ){
-										elCol[i].style.display = 'none';
-									}
-									for(var i = slide_itemizely.targetedElSiblings.length; i--; ){
-										slide_itemizely.targetedElSiblings[i].style.display = 'block';
-									}
-                                /* Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
+                                Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
-                                    }); */
-                                /* slide_itemizely.targetedElSiblings.forEach(function(i, j) {
+                                    });
+                                slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     i.style.display = 'block';
-                                }); */
+                                });
                             }
                         });
                         slide_itemizely.targetedElSiblings = [];
