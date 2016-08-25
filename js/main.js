@@ -1828,13 +1828,13 @@ function Config() {
 							}
                     };
                 Array.prototype.forEach.call(h2Col, function(i, j) {
-                    i.setAttribute('name', i['innerHTML'].replace(/\s+/g, ''));
+                    i.setAttribute('name', decodeURIComponent(i['innerHTML']).replace(/\s+/g, ''));
                     h = config.menu.headings();
-                    headingGroup1stAnchor = config.menu.a(i, i.innerHTML);
+                    headingGroup1stAnchor = config.menu.a(i, decodeURIComponent(i.innerHTML));
                     i.innerHTML = '';
                     i.appendChild(headingGroup1stAnchor.cloneNode(true));
-                    i.firstChild.setAttribute('name', i['innerHTML'].match(/[^<a>].*[^</a>]/g)[0].replace(/\s+/g, ''));
-                    headingGroup1stAnchor.setAttribute('href', '#' + i.firstChild.name);
+                    i.firstChild.setAttribute('name', decodeURIComponent(i['innerHTML']).match(/[^<a>].*[^</a>]/g)[0].replace(/\s+/g, ''));
+                    headingGroup1stAnchor.setAttribute('href', '#' + decodeURIComponent(i.firstChild.name));
                     h.appendChild(headingGroup1stAnchor);
                     recur(i, j);
                     leftbar.appendChild(h);
