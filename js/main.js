@@ -1850,7 +1850,7 @@ function Config() {
                     map: {},
                     mapper: function() {
                         Array.prototype.forEach.call(this.firstHeadingCol, function(i, j) {
-                            slide_itemizely.map[j] = i.offsetTop: i.offsetTop - 100;
+                            slide_itemizely.map[j] = i.offsetTop - 100;
                         });
                     },
                     getter: function(key) {
