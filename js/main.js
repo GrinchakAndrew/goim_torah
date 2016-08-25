@@ -1920,6 +1920,13 @@ function Config() {
                                     }
                                 });
 								
+								var elCol = document.querySelectorAll('.headingGroup a:not(:first-child)');
+									for(var i = elCol.length; i--; ){
+										elCol[i].style.display = 'none';
+									}
+									for(var i = slide_itemizely.targetedElSiblings.length; i--; ){
+										slide_itemizely.targetedElSiblings[i].style.display = 'block';
+									}
                                 /* Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
