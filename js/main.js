@@ -1320,7 +1320,6 @@ function Config() {
                             */
                             config.getSlidesCollection = config.getSlideHTML;
                             config.post();
-							
                         } else {
                             var _slide_ = request.responseText;
                             var lastSlide = document.querySelector('.slide-wrapper:last-of-type') ||
@@ -1860,9 +1859,16 @@ function Config() {
                     targetedElSiblings: [],
                     counterPartNamesEls: {},
                     router: function() {
-                        Object.keys(this.map).forEach(function(i, j) {
+						/* Object.keys(this.map).forEach(function(i, j) {
                             slide_itemizely.item2Show = slide_itemizely.scrollTop >= slide_itemizely.map[i] ? i : slide_itemizely.item2Show;
-                        });
+                        }); */
+						var oKeys = Object.keys(this.map);
+						for(var i = 0; i< oKeys.length; i++) {
+							if(slide_itemizely.scrollTop >= slide_itemizely.map[i]){
+								slide_itemizely.item2Show = i;
+								break;
+							}
+						}
                         var targetedEl;
                         Array.prototype.forEach.call(document.querySelectorAll('.headingGroup :first-child'), function(i, j) {
                             if (i && slide_itemizely.item2Show && decodeURIComponent(i.innerHTML) &&
@@ -1917,10 +1923,10 @@ function Config() {
                                     }
                                 });
 								
-                                /* Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
+                                Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
-                                    }); */
+                                    });
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     i.style.display = 'block';
                                 });
