@@ -1887,7 +1887,6 @@ function Config() {
 											with the small-sized slides
 										*/ 
                                     if ((slide_itemizely.scrollTop + 250) >= el.offsetTop && slide_itemizely.scrollTop) {
-										
                                         Array.prototype.forEach.call(document.querySelectorAll('a[style*=color]'), function(i, j) {
                                             i.style.color = '#0066FF';
                                             i.style.fontWeight = '';
@@ -1918,10 +1917,10 @@ function Config() {
                                     }
                                 });
 								
-                                Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
+                                /* Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
-                                    });
+                                    }); */
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     i.style.display = 'block';
                                 });
