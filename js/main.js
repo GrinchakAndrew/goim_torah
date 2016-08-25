@@ -1863,9 +1863,10 @@ function Config() {
                             slide_itemizely.item2Show = slide_itemizely.scrollTop >= slide_itemizely.map[i] ? i : slide_itemizely.item2Show;
                         }); */
 						var oKeys = Object.keys(this.map);
-						for(var i = 0; i< oKeys.length; i++) {
-							if(slide_itemizely.scrollTop >= slide_itemizely.map[i]){
+						for(var i = oKeys.length; i--;) {
+							if(slide_itemizely.scrollTop >= slide_itemizely.map[i]) {
 								slide_itemizely.item2Show = i;
+								break;
 							}
 						}
                         var targetedEl;
@@ -2015,7 +2016,7 @@ function Config() {
 					
                     if(_animatory.upwards()) {
                         config.animatory._windowSrollY = window.scrollY;
-                        config.animatory.animate(document.getElementById('stickingMenu'), 100, 0.03, true);
+                        config.animatory.animate(document.getElementById('stickingMenu'), 100, 1, true);
                     }
                     if(_animatory.downwards()) {
                         config.animatory._windowSrollY = window.scrollY;
