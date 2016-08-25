@@ -1327,7 +1327,7 @@ function Config() {
                                 document.querySelector('.slide-wrapper');
                             var lastSlideParent = lastSlide.parentNode;
 								lastSlideParent.innerHTML = lastSlideParent.innerHTML + _slide_;
-								config.menu.cleanMenu();
+								/* config.menu.cleanMenu(); */
 								config.animatory.deanimate(document.querySelector('.slide-wrapper:last-of-type'));
 								instance.setImgs();
 						}
