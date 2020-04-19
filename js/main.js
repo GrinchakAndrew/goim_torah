@@ -1961,7 +1961,7 @@ function Config() {
                 return (document.body.scrollTop || document.documentElement.scrollTop);
             },
             deanimate: function(el) {
-				if(el){
+                if (el && !config.animatory.activeState){
 					el.style.opacity = '0.2';
 				}
             },
@@ -1989,14 +1989,12 @@ function Config() {
 							return true;
                         }
                     };
-                _interval = setInterval(function () {
-                    reverse ? obverse() : direct();
-                }, time);	
-                // if(!config.animatory.activeState) {
-				// 	_interval = setInterval(function() {
-				// 		reverse ? obverse() : direct();
-				// 	}, time);	
-				// }
+            
+                if(!config.animatory.activeState) {
+					_interval = setInterval(function() {
+						reverse ? obverse() : direct();
+					}, time);	
+				}
             },
             _windowSrollY : 0,
             
@@ -2060,9 +2058,15 @@ instance.d(function() {
         instance.lastSlide = document.querySelector('.slide-wrapper:last-of-type') || document.querySelector('.slide-wrapper');
         instance.slideIndex = instance.lastSlide.getAttribute('index');
         instance.lastSlideOffsetTop = instance.lastSlide.offsetTop; 
-        if (instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)) { 
+        if ((instance.lastSlide.style.opacity && instance.lastSlide.style.opacity >= 1) && instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)) { 
             if (
                 instance.lastSlide && document.querySelector('.slide-wrapper:last-of-type').offsetTop >= instance.lastSlideOffsetTop) {  
+                instance.slideIndexArray.push(instance.slideIndex);
+                instance.p();
+            }
+        } else if (!instance.lastSlide.style.opacity && instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)){ 
+            if (
+                instance.lastSlide && document.querySelector('.slide-wrapper:last-of-type').offsetTop >= instance.lastSlideOffsetTop) {
                 instance.slideIndexArray.push(instance.slideIndex);
                 instance.p();
             }
