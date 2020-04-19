@@ -1320,14 +1320,19 @@ function Config() {
                             */
                             config.getSlidesCollection = config.getSlideHTML;
                             config.post();
+							
                         } else {
                             var _slide_ = request.responseText;
                             var lastSlide = document.querySelector('.slide-wrapper:last-of-type') ||
                                 document.querySelector('.slide-wrapper');
                             var lastSlideParent = lastSlide.parentNode;
 								lastSlideParent.innerHTML = lastSlideParent.innerHTML + _slide_;
-								config.menu.cleanMenu();
-								config.animatory.deanimate(document.querySelector('.slide-wrapper:last-of-type'));
+                                config.menu.cleanMenu();
+                            
+                            if (parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1]) && document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])]){                               
+                                config.animatory.deanimate(document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])]);
+                                config.animatory.animate(document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])], 100, 0.2);
+                            }
 								instance.setImgs();
 						}
                     }
@@ -1355,7 +1360,7 @@ function Config() {
 		});
 	}, 
        getSlidesCollection: function() {
-            if (Object.prototype.toString.call(config.url) === "[object String]" && !config.slidesCollection) {
+            if (Object.prototype.toString.call(config.url) === "[object String]" && !config.slidesCollection) { 
                 config.postingCalls(config.url, true);
             }
         },
@@ -1808,7 +1813,7 @@ function Config() {
                     recur = function(el, j, prev) {
 						if (el !== h2Col[j + 1]){
 								if (el && el.tagName == 'H3'){
-									var _h = decodeURIComponent(el['innerHTML' ? 'innerHTML' : 'innerText']),
+									var _h = el['innerHTML' ? 'innerHTML' : 'innerText'],
 										_name = _h.replace(/\s+/g, '');
 									el['innerHTML' ? 'innerHTML' : 'innerText'] = '';
 									el.appendChild(config.menu.a(el, _h, _name));
@@ -1827,13 +1832,13 @@ function Config() {
 							}
                     };
                 Array.prototype.forEach.call(h2Col, function(i, j) {
-                    i.setAttribute('name', decodeURIComponent(i['innerHTML']).replace(/\s+/g, ''));
+                    i.setAttribute('name', i['innerHTML'].replace(/\s+/g, ''));
                     h = config.menu.headings();
-                    headingGroup1stAnchor = config.menu.a(i, decodeURIComponent(i.innerHTML));
+                    headingGroup1stAnchor = config.menu.a(i, i.innerHTML);
                     i.innerHTML = '';
                     i.appendChild(headingGroup1stAnchor.cloneNode(true));
-                    i.firstChild.setAttribute('name', decodeURIComponent(i['innerHTML']).match(/[^<a>].*[^</a>]/g)[0].replace(/\s+/g, ''));
-                    headingGroup1stAnchor.setAttribute('href', '#' + decodeURIComponent(i.firstChild.name));
+                    i.firstChild.setAttribute('name', i['innerHTML'].match(/[^<a>].*[^</a>]/g)[0].replace(/\s+/g, ''));
+                    headingGroup1stAnchor.setAttribute('href', '#' + i.firstChild.name);
                     h.appendChild(headingGroup1stAnchor);
                     recur(i, j);
                     leftbar.appendChild(h);
@@ -1849,7 +1854,7 @@ function Config() {
                     map: {},
                     mapper: function() {
                         Array.prototype.forEach.call(this.firstHeadingCol, function(i, j) {
-                            slide_itemizely.map[j] = i.offsetTop - 100;
+                            slide_itemizely.map[j] = (i.offsetTop - 100);
                         });
                     },
                     getter: function(key) {
@@ -1859,20 +1864,15 @@ function Config() {
                     targetedElSiblings: [],
                     counterPartNamesEls: {},
                     router: function() {
-						/* Object.keys(this.map).forEach(function(i, j) {
+                        Object.keys(this.map).forEach(function(i, j) {
                             slide_itemizely.item2Show = slide_itemizely.scrollTop >= slide_itemizely.map[i] ? i : slide_itemizely.item2Show;
-                        }); */
-						var oKeys = Object.keys(this.map);
-						for(var i = oKeys.length; i--;) {
-							if(slide_itemizely.scrollTop >= slide_itemizely.map[i]) {
-								slide_itemizely.item2Show = i;
-								break;
-							}
-						}
-                        var targetedEl;
-                        Array.prototype.forEach.call(document.querySelectorAll('.headingGroup :first-child'), function(i, j) {
-                            if (i && slide_itemizely.item2Show && decodeURIComponent(i.innerHTML) &&
-                                decodeURIComponent(i.innerHTML) == decodeURIComponent(slide_itemizely.firstHeadingCol[slide_itemizely.item2Show].innerText)) {
+                        });
+
+                        var elCol = document.querySelectorAll('.headingGroup :first-child'),
+                            targetedEl;
+                        Array.prototype.forEach.call(elCol, function(i, j) {
+                            if (i && slide_itemizely.item2Show && i.innerHTML &&
+                                i.innerHTML == slide_itemizely.firstHeadingCol[slide_itemizely.item2Show].innerText) {
                                 targetedEl = i;
                                 while (targetedEl.nextElementSibling) {
                                     slide_itemizely.targetedElSiblings.push(targetedEl.nextElementSibling);
@@ -1880,7 +1880,7 @@ function Config() {
                                 }
                                 slide_itemizely.targetedElSiblings.forEach(function(i, j) {
                                     var href = i.getAttribute("href");
-										href = decodeURIComponent(href.replace(/#/, '')),
+										href = href.replace(/#/, ''),
                                         lookUpStr = 'a[name*="' + href + '"' + ']',
                                         el = document.querySelector(lookUpStr), 
 										bodyEl2MatchHref = '',
@@ -1910,19 +1910,17 @@ function Config() {
 										if(document.querySelector('#stickingMenu h3')){
 											document.querySelector('#stickingMenu h3').appendChild(clone);
 										}
-											bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
-											bodyEl2MatchHref = decodeURIComponent(bodyEl2MatchHref);
-											var bodyEl2Match;
-											if(bodyEl2MatchHref) {
-												bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
-											}
-											slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');	
-											if(bodyEl2Match && slide2animate){
-												config.animatory.animate(slide2animate, 100, 0.3);
-											}
+										bodyEl2MatchHref = i['href'].match(/#(.*)/) ? i['href'].match(/#(.*)/)[1] : null;
+										bodyEl2Match;
+										if(bodyEl2MatchHref) {
+											bodyEl2Match = document.querySelector('a[name="' +  bodyEl2MatchHref + '"]');
+										}
+										slide2animate = config.closest(bodyEl2Match, 'DIV', 'slide-wrapper');
+										if(bodyEl2Match && slide2animate){
+											config.animatory.animate(slide2animate, 100, 0.3);
+										}
                                     }
                                 });
-								
                                 Array.prototype.forEach.call(document.querySelectorAll('.headingGroup a:not(:first-child)'),
                                     function(i, j) {
                                         i.style.display = 'none';
@@ -1990,13 +1988,17 @@ function Config() {
 							return true;
                         }
                     };
-                if(!config.animatory.activeState) {
-					_interval = setInterval(function() {
-						reverse ? obverse() : direct();
-					}, time);	
-				}
+                _interval = setInterval(function () {
+                    reverse ? obverse() : direct();
+                }, time);	
+                // if(!config.animatory.activeState) {
+				// 	_interval = setInterval(function() {
+				// 		reverse ? obverse() : direct();
+				// 	}, time);	
+				// }
             },
             _windowSrollY : 0,
+            
 			handler: function(e) {
                 var _animatory = {
                     runOnce: false,
@@ -2016,7 +2018,7 @@ function Config() {
 					
                     if(_animatory.upwards()) {
                         config.animatory._windowSrollY = window.scrollY;
-                        config.animatory.animate(document.getElementById('stickingMenu'), 100, 1, true);
+                        config.animatory.animate(document.getElementById('stickingMenu'), 100, 0.03, true);
                     }
                     if(_animatory.downwards()) {
                         config.animatory._windowSrollY = window.scrollY;
@@ -2056,10 +2058,10 @@ instance.d(function() {
     instance.e(document, 'scroll', function(e) {
         instance.lastSlide = document.querySelector('.slide-wrapper:last-of-type') || document.querySelector('.slide-wrapper');
         instance.slideIndex = instance.lastSlide.getAttribute('index');
-        instance.lastSlideOffsetTop = instance.lastSlide.offsetTop;
-		
-        if (instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)) {
-            if (instance.lastSlide && document.body.scrollTop + 250 >= instance.lastSlideOffsetTop / 1.3) {
+        instance.lastSlideOffsetTop = instance.lastSlide.offsetTop; 
+        if (instance.slideIndex && (~~instance.slideIndexArray.indexOf(instance.slideIndex) || !instance.slideIndexArray.length)) { 
+            if (
+                instance.lastSlide && document.querySelector('.slide-wrapper:last-of-type').offsetTop >= instance.lastSlideOffsetTop) {  
                 instance.slideIndexArray.push(instance.slideIndex);
                 instance.p();
             }
@@ -2068,10 +2070,12 @@ instance.d(function() {
     });
 	instance.setImgs();
 });
+
 instance.e(document, instance.ani.mousewheelEvt, instance.ani.handler);
 instance.e(document, 'keyup', instance.ani.handler);
 instance.e(document, 'mousedown', instance.ani.handler);
 instance.e(document, 'touchend', instance.ani.handler);
+
 /* instance.e(document, 'click', function(e) {
     var event = e || event,
         target = event.target || event.srcElement,
