@@ -1329,7 +1329,7 @@ function Config() {
 								lastSlideParent.innerHTML = lastSlideParent.innerHTML + _slide_;
                                 config.menu.cleanMenu();
                             
-                            if (parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1]) && document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])]){                               
+                            if (parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1]) && document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])] && !config.animatory.activeState){                               
                                 config.animatory.deanimate(document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])]);
                                 config.animatory.animate(document.querySelectorAll(`.slide-wrapper[index]`)[parseInt(instance.slideIndexArray[instance.slideIndexArray.length - 1])], 100, 0.2);
                             }
